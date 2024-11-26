@@ -2,6 +2,26 @@
 Utilizing AI to explore Quantum Many-body system
 
 
+## updata_1.0 : 2024/11/26
+### dataset.py 
+
+A series of classes have been designed to simulate and generate Gibbs states, implementing the following functions:
+- An interface for importing the Hamiltonian of different many-body models, with the Ising model currently defined.
+- The ability to perform a temperature gradient scan under the Gibbs state, with customizable temperature range and step size.
+
+### model.py
+
+A simple Multi-Layer Perceptron (MLP) architecture is employed to predict the temperature of Gibbs states. The model consists of two hidden layers and an output layer, using the ReLU activation function and Dropout to prevent overfitting. The input is a flattened matrix of Gibbs states, and the output is the corresponding temperature value, making it a regression problem.
+
+### train.py
+
+The following functions are defined in `train.py`:
+- **load_gibbs_states()**: Loads Gibbs state data from a `.pkl` file.
+- **preprocess_data()**: Flattens and standardizes the Gibbs state matrix to prepare it as input for the neural network.
+- **train()**: Defines the training process, including forward propagation, loss calculation, backpropagation, and optimization steps.
+- **save_model()**: Saves the trained model to a file for later use.
+
+
 ## updata_0.0 : 2024/11/22
 upload the previous code and trial for exploring GCN in Ising model
 
@@ -36,22 +56,4 @@ This Python script implements a Graph Neural Network (GNN) using PyTorch to pred
 ### trial.ipynb
 ### requirements.txt
 
-## updata_1.0 : 2024/11/26
-### dataset.py 
-
-A series of classes have been designed to simulate and generate Gibbs states, implementing the following functions:
-- An interface for importing the Hamiltonian of different many-body models, with the Ising model currently defined.
-- The ability to perform a temperature gradient scan under the Gibbs state, with customizable temperature range and step size.
-
-### model.py
-
-A simple Multi-Layer Perceptron (MLP) architecture is employed to predict the temperature of Gibbs states. The model consists of two hidden layers and an output layer, using the ReLU activation function and Dropout to prevent overfitting. The input is a flattened matrix of Gibbs states, and the output is the corresponding temperature value, making it a regression problem.
-
-### train.py
-
-The following functions are defined in `train.py`:
-- **load_gibbs_states()**: Loads Gibbs state data from a `.pkl` file.
-- **preprocess_data()**: Flattens and standardizes the Gibbs state matrix to prepare it as input for the neural network.
-- **train()**: Defines the training process, including forward propagation, loss calculation, backpropagation, and optimization steps.
-- **save_model()**: Saves the trained model to a file for later use.
 
