@@ -46,9 +46,9 @@ class IsingHamiltonian(Hamiltonian):
         """
         H = np.zeros((2**self.n_qubits, 2**self.n_qubits), dtype=complex)
         for i in range(self.n_qubits - 1):
-            H -= self.J[i] * kron_n([I]*i + [Z, Z] + [I]*(self.n_qubits - i - 2))
+            H -= self.J * kron_n([I]*i + [Z, Z] + [I]*(self.n_qubits - i - 2))
         for i in range(self.n_qubits):
-            H -= self.h[i] * kron_n([I]*i + [X] + [I]*(self.n_qubits - i - 1))
+            H -= self.h * kron_n([I]*i + [X] + [I]*(self.n_qubits - i - 1))
         self.H = H
         return self.H
 
@@ -142,4 +142,4 @@ def example_simulation():
     simulator.save_gibbs_states_to_pkl(gibbs_states, 'gibbs_states.pkl')
 
 # Run the example simulation
-example_simulation()
+# example_simulation()
