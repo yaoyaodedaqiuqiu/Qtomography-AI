@@ -48,7 +48,7 @@ Follow these steps to set up and run the project:
 
 6. **View Example Results**:
 
-    After running the testing script, you can find the generated correlation plots in the `figure_test` directory. Below are some example results:
+    After running the testing script, you can find the generated correlation plots in the `figure` directory. Below are some example results:
 
     ![Correlations at T=2.5](figure/correlations_T2.5.png)
 
