@@ -41,17 +41,43 @@ Follow these steps to set up and run the project:
     python train.py
     ```
 
+5. **Run the Testing Script**:
+    ```bash
+    python test.py
+    ```
+
+6. **View Example Results**:
+
+    After running the testing script, you can find the generated correlation plots in the `figure_test` directory. Below are some example results:
+
+    ![Correlations at T=2.5](figure/correlations_T2.5.png)
+
+    *Figures: Predicted vs True Correlations at different temperatures.*
+
 ## Updates
 
-### Update 2.0 : 2024/12/15
+### Update 2.1 : 2024/12/17
 
-- **Updated `requirements.txt`**: Ensured all necessary dependencies are listed and removed any redundant packages.
-- **Reorganized Project Structure**: Streamlined the repository by organizing all code into three main directories:
-    - **`train/`**: Contains training scripts and related utilities.
-    - **`model/`**: Houses model definitions and architectures.
-    - **`dataset/`**: Includes data generation and processing scripts.
-- **Cleaned Up Files**: Removed previously redundant files to maintain a clean and efficient codebase.
-- **Introduced New Documentation**: Provided brief introductions for each of the three main directories.
+- **Modified `train.py`**:
+    - **Data Utilization**: Configured the training script to use 100% of the generated data for training, eliminating the validation and testing split.
+    - **Removed Validation Phase**: The validation and testing phases have been removed from the training process to streamline training.
+    - **Enhanced Logging**: Improved logging to provide more detailed training progress and performance metrics.
+  
+- **Added `test.py`**:
+    - **Data Generation for Testing**: Introduced a new script to generate test data with specific parameters:
+        - `N = 9`
+        - `J_list = [1.0, 1.5, 2.0]`
+        - `h_list = np.linspace(0, 1, 6)`
+        - `t_list = [1.2, 1.8, 2.5]`
+    - **Model Evaluation**: The script loads the trained model parameters and evaluates the model on the newly generated test data.
+    - **Visualization**: Generates and saves plots comparing the true and predicted correlation terms for the test data.
+    - **Figure Naming Fix**: Ensured that figure filenames are formatted with one decimal place for temperature values to maintain consistency and readability.
+    - **Directory Management**: Ensures that test data and visualizations are saved in designated directories for better organization.
+
+- **Project Structure Enhancements**:
+    - **`test/` Directory**: Created a new directory to house the `test.py` script and related utilities.
+    - **Documentation Updates**: Updated documentation to reflect the addition of the testing phase and provide guidance on how to execute it.
+    - **Figure Naming Fix**: Updated `test.py` to format temperature values in figure filenames to one decimal place, ensuring cleaner and more readable filenames.
 
 #### `train/`
 
@@ -65,7 +91,38 @@ Houses the neural network architectures used for predicting correlations in the 
 
 Includes scripts for generating and processing the Gibbs state data, simulating quantum measurements, and preparing datasets for training.
 
+#### `test/`
+
+Contains scripts and utilities for generating test data, evaluating the trained models, and visualizing the results.
+
 ### Previous Updates
+
+#### Update 2.0 : 2024/12/15
+
+- **Updated `requirements.txt`**: Ensured all necessary dependencies are listed and removed any redundant packages.
+- **Reorganized Project Structure**: Streamlined the repository by organizing all code into four main directories:
+    - **`train/`**: Contains training scripts and related utilities.
+    - **`model/`**: Houses model definitions and architectures.
+    - **`dataset/`**: Includes data generation and processing scripts.
+    - **`test/`**: Introduced for testing scripts and evaluation tools.
+- **Cleaned Up Files**: Removed previously redundant files to maintain a clean and efficient codebase.
+- **Introduced New Documentation**: Provided brief introductions for each of the four main directories.
+
+##### `train/`
+
+Contains scripts related to training the AI models, including the main training loop, evaluation, and visualization tools.
+
+##### `model/`
+
+Houses the neural network architectures used for predicting correlations in the quantum many-body system.
+
+##### `dataset/`
+
+Includes scripts for generating and processing the Gibbs state data, simulating quantum measurements, and preparing datasets for training.
+
+##### `test/`
+
+Introduced for generating test data, loading trained models, evaluating performance, and visualizing results.
 
 #### Update 1.0 : 2024/11/26
 
@@ -117,8 +174,9 @@ This Python script implements a Graph Neural Network (GNN) using PyTorch to pred
 5. **Training Loop**: The model is trained over a specified number of epochs, and the loss is printed after each epoch.
 
 ##### `draw.py`
-##### `trial.ipynb`
-##### `requirements.txt`
 
+##### `trial.ipynb`
+
+##### `requirements.txt`
 
 

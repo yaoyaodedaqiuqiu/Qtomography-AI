@@ -1,3 +1,4 @@
+# dataset.py
 import os
 import numpy as np
 import pickle
@@ -191,7 +192,7 @@ def calculate_correlation(gibbs_state, N):
         corr_term_each.append(corr_term)
     return corr_term_each
 
-def generate_and_save_data(N, J_list, h_list, t_list):
+def generate_and_save_data(N, J_list, h_list, t_list, data_folder='correlation_dataset'):
     """
     Generate Gibbs states for each combination of h, j, t and save correlation data.
     
@@ -200,20 +201,21 @@ def generate_and_save_data(N, J_list, h_list, t_list):
         J_list (list of float): List of j values.
         h_list (list of float): List of h values.
         t_list (list of float): List of temperature values.
+        data_folder (str): Folder to save the generated data.
     """
-    correlation_folder = 'correlation_dataset'
-    gibbs_folder = 'gibbs_dataset'
+    # Define subfolders based on the data_folder
+    gibbs_folder = os.path.join(data_folder, 'gibbs_dataset')
+    correlation_folder = os.path.join(data_folder, 'correlation_dataset')
     model_pth_folder = 'model_pth'
     figure_folder = 'figure'
+    test_folder = 'test_dataset'
+    
     # Ensure target folders exist
-    if not os.path.exists(gibbs_folder):
-        os.makedirs(gibbs_folder)
-    if not os.path.exists(correlation_folder):
-        os.makedirs(correlation_folder)
-    if not os.path.exists(model_pth_folder):
-        os.makedirs('model_pth', exist_ok=True)
-    if not os.path.exists(figure_folder):
-        os.makedirs('figure', exist_ok=True)
+    os.makedirs(gibbs_folder, exist_ok=True)
+    os.makedirs(correlation_folder, exist_ok=True)
+    os.makedirs(model_pth_folder, exist_ok=True)
+    os.makedirs(figure_folder, exist_ok=True)
+    os.makedirs(test_folder, exist_ok=True)
     
     correlation_data = {}
     
@@ -233,18 +235,20 @@ def generate_and_save_data(N, J_list, h_list, t_list):
                 gibbs_states = simulator.simulate_temperature_scan(t, t + 1, 1)  # Only T=t
                 
                 # Save Gibbs states to pickle
-                gibbs_filename = f'{gibbs_folder}/gibbs_ising_nq{N}_T{t}_j{j:.4f}_h{h:.4f}.pkl'
-                simulator.save_gibbs_states_to_pkl(gibbs_states, gibbs_filename)
-                print(f"Saved Gibbs states to: {gibbs_filename}")
+                gibbs_filename = f'gibbs_ising_nq{N}_T{t}_j{j:.4f}_h{h:.4f}.pkl'
+                gibbs_filepath = os.path.join(gibbs_folder, gibbs_filename)
+                simulator.save_gibbs_states_to_pkl(gibbs_states, gibbs_filepath)
+                print(f"Saved Gibbs states to: {gibbs_filepath}")
                 
                 # Calculate correlation term for T=t
                 gibbs_state = gibbs_states[t]
                 corr_term_each = calculate_correlation(gibbs_state, N)
                 
                 # Save correlation terms to numpy file
-                correlation_filename = f'{correlation_folder}/gibbs_ising_nq{N}_T{t}_j{j:.4f}_h{h:.4f}_Z.npy'
-                np.save(correlation_filename, corr_term_each)
-                print(f"Saved correlation terms to: {correlation_filename}")
+                correlation_filename = f'gibbs_ising_nq{N}_T{t}_j{j:.4f}_h{h:.4f}_Z.npy'
+                correlation_filepath = os.path.join(correlation_folder, correlation_filename)
+                np.save(correlation_filepath, corr_term_each)
+                print(f"Saved correlation terms to: {correlation_filepath}")
                 
                 # Store in dictionary for plotting
                 correlation_data[(h, j, t)] = corr_term_each
@@ -289,4 +293,4 @@ if __name__ == "__main__":
     h_list = np.linspace(0, 1, 21)  # 21 h values from 0 to 1 with step of 0.05
     t_list = [1.0, 1.5, 2.0]  # Example temperature values
     
-    generate_and_save_data(N, J_list, h_list, t_list)
+    generate_and_save_data(N, J_list, h_list, t_list, data_folder='correlation_dataset')
