@@ -286,6 +286,62 @@ def plot_correlation(h_list, j_list, t_list, N, correlation_data):
     plt.tight_layout()
     plt.show()
 
+class CorrelationDatasetPyTorch:
+    def __init__(self, data_folder, N):
+        """
+        Initialize the dataset.
+        
+        Parameters:
+            data_folder (str): Path to the correlation data folder.
+            N (int): Number of qubits.
+        """
+        self.inputs = []   # Store input features [h, j, t]
+        self.targets = []  # Store correlation terms
+        
+        correlation_folder = os.path.join(data_folder, 'correlation_dataset')
+        
+        # Traverse all files in the correlation folder
+        for filename in os.listdir(correlation_folder):
+            if filename.startswith(f'gibbs_ising_nq{N}_T') and filename.endswith('_Z.npy'):
+                # Extract h, j, t values from filename
+                try:
+                    parts = filename.replace('.npy', '').split('_')
+                    t = None
+                    j = None
+                    h = None
+                    for part in parts:
+                        if part.startswith('T'):
+                            t = float(part[1:])
+                        elif part.startswith('j'):
+                            j = float(part[1:])
+                        elif part.startswith('h'):
+                            h = float(part[1:])
+                    if t is None or j is None or h is None:
+                        raise ValueError("Missing h, j, or t values.")
+                except (ValueError, IndexError) as e:
+                    logger.warning(f"Unable to parse h, j, t values from filename: {filename}")
+                    continue
+                
+                # Load correlation data
+                filepath = os.path.join(correlation_folder, filename)
+                corr = np.load(filepath)
+                
+                # Add h, j, t and correlation terms to lists
+                self.inputs.append([h, j, t])
+                self.targets.append(corr)
+        
+        self.inputs = np.array(self.inputs, dtype=np.float32)    # Shape: (number of samples, 3)
+        self.targets = np.array(self.targets, dtype=np.float32)  # Shape: (number of samples, N-1)
+    
+    def __len__(self):
+        return len(self.inputs)
+    
+    def __getitem__(self, idx):
+        input_features = self.inputs[idx]
+        target = self.targets[idx]
+        return torch.tensor(input_features, dtype=torch.float32), torch.tensor(target, dtype=torch.float32)
+
+
 if __name__ == "__main__":
     # Example usage of the data generation module
     N = 9

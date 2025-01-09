@@ -48,15 +48,70 @@ Follow these steps to set up and run the project:
 
 6. **View Example Results**:
 
-    After running the testing script, you can find the generated correlation plots in the `figure` directory. Below are some example results:
+    After running the testing script, you can find the generated correlation plots in the `figure_test` directory. Below are some example results:
 
-    ![Correlations at T=2.5](figure/correlations_T2.5.png)
+    #### Heatmap of Predicted Correlation `<σ₁ᶻ σ₂ᶻ>`
 
-    *Figures: Predicted vs True Correlations at different temperatures.*
+    ![Heatmap of Correlation](figure_test/heatmap_correlation.png)
+
+    *Heatmap: Predicted Correlation `<σ₁ᶻ σ₂ᶻ>` Across Temperature T and Transverse Field h.*
+
+    #### Correlation Functions for Specific h Values
+
+
+
+
+    ![Correlation Functions h=0.5](figure_test/correlation_functions_h0.5.png)
+
+    *Figures: Predicted vs True Correlation Functions for Specific h Values.*
+
+    #### Precision Heatmap
+
+    ![Precision Heatmap](figure_test/precision_heatmap.png)
+
+    *Heatmap: Standard Deviation of Predicted Correlation Across Temperature T and Transverse Field h, indicating prediction precision.*
 
 ## Updates
 
-### Update 2.1 : 2024/12/17
+### Update 2.2 : 2025/1/9
+
+- **Integrated `CorrelationDatasetPyTorch` into `dataset.py`**:
+    - Moved the `CorrelationDatasetPyTorch` class definition into the `dataset.py` module to streamline imports and avoid redundancy.
+    - Fixed the previous import error by ensuring that all necessary classes and functions are properly exported from `dataset.py`.
+
+- **Updated `test.py`**:
+    - **Enhanced Plotting Capabilities**: Modified the testing script to generate comprehensive plots, including:
+        - **Heatmap of Predicted Correlation**: Visualizes how the predicted correlation `<σ₁ᶻ σ₂ᶻ>` varies with temperature `T` and transverse field `h`.
+        - **Critical Point Analysis**: Focuses on `h=0.5` to analyze the model's performance near the phase transition point.
+        - **Precision Heatmap**: Shows the standard deviation of predicted correlations across `T` and `h`, indicating the precision and consistency of the model's predictions.
+    - **Figure Naming Consistency**: Ensured that all figure filenames are formatted with one decimal place for temperature values (e.g., `correlation_functions_h0.1.png`) to maintain clarity and avoid long decimal numbers.
+    - **Directory Management**: Verified that all generated figures are saved in the `figure_test` directory with appropriate subdirectories if necessary.
+
+
+
+- **Bug Fixes and Enhancements**:
+    - Fixed the issue with filename formatting in `test.py` to prevent errors when loading and saving figures.
+    - Enhanced logging to provide more detailed information during the testing and plotting processes.
+
+#### `train/`
+
+Contains scripts related to training the AI models, including the main training loop, evaluation, and visualization tools.
+
+#### `model/`
+
+Houses the neural network architectures used for predicting correlations in the quantum many-body system.
+
+#### `dataset/`
+
+Includes scripts for generating and processing the Gibbs state data, simulating quantum measurements, and preparing datasets for training. Now also contains the `CorrelationDatasetPyTorch` class for dataset management.
+
+#### `test/`
+
+Contains scripts and utilities for generating test data, evaluating the trained models, and visualizing the results.
+
+### Previous Updates
+
+#### Update 2.1 : 2025/1/9
 
 - **Modified `train.py`**:
     - **Data Utilization**: Configured the training script to use 100% of the generated data for training, eliminating the validation and testing split.
@@ -79,23 +134,21 @@ Follow these steps to set up and run the project:
     - **Documentation Updates**: Updated documentation to reflect the addition of the testing phase and provide guidance on how to execute it.
     - **Figure Naming Fix**: Updated `test.py` to format temperature values in figure filenames to one decimal place, ensuring cleaner and more readable filenames.
 
-#### `train/`
+##### `train/`
 
 Contains scripts related to training the AI models, including the main training loop, evaluation, and visualization tools.
 
-#### `model/`
+##### `model/`
 
 Houses the neural network architectures used for predicting correlations in the quantum many-body system.
 
-#### `dataset/`
+##### `dataset/`
 
 Includes scripts for generating and processing the Gibbs state data, simulating quantum measurements, and preparing datasets for training.
 
-#### `test/`
+##### `test/`
 
-Contains scripts and utilities for generating test data, evaluating the trained models, and visualizing the results.
-
-### Previous Updates
+Introduced for generating test data, loading trained models, evaluating performance, and visualizing results.
 
 #### Update 2.0 : 2024/12/15
 
@@ -179,4 +232,10 @@ This Python script implements a Graph Neural Network (GNN) using PyTorch to pred
 
 ##### `requirements.txt`
 
+## License
 
+[MIT](LICENSE)
+
+## Contact
+
+For any questions or suggestions, please open an issue or contact [your-email@example.com](mailto:your-email@example.com).

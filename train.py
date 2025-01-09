@@ -17,71 +17,17 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 logger.info(f"Using device: {device}")
 
 # Define PyTorch Dataset class for loading h, j, t and corresponding correlation terms
-class CorrelationDatasetPyTorch(Dataset):
-    def __init__(self, data_folder, N):
-        """
-        Initialize the dataset.
-        
-        Parameters:
-            data_folder (str): Path to the correlation data folder.
-            N (int): Number of qubits.
-        """
-        self.inputs = []   # Store input features [h, j, t]
-        self.targets = []  # Store correlation terms
-        
-        correlation_folder = os.path.join(data_folder, 'correlation_dataset')
-        
-        # Traverse all files in the correlation folder
-        for filename in os.listdir(correlation_folder):
-            if filename.startswith(f'gibbs_ising_nq{N}_T') and filename.endswith('_Z.npy'):
-                # Extract h, j, t values from filename
-                try:
-                    parts = filename.replace('.npy', '').split('_')
-                    t = None
-                    j = None
-                    h = None
-                    for part in parts:
-                        if part.startswith('T'):
-                            t = float(part[1:])
-                        elif part.startswith('j'):
-                            j = float(part[1:])
-                        elif part.startswith('h'):
-                            h = float(part[1:])
-                    if t is None or j is None or h is None:
-                        raise ValueError("Missing h, j, or t values.")
-                except (ValueError, IndexError) as e:
-                    logger.warning(f"Unable to parse h, j, t values from filename: {filename}")
-                    continue
-                
-                # Load correlation data
-                filepath = os.path.join(correlation_folder, filename)
-                corr = np.load(filepath)
-                
-                # Add h, j, t and correlation terms to lists
-                self.inputs.append([h, j, t])
-                self.targets.append(corr)
-        
-        self.inputs = np.array(self.inputs, dtype=np.float32)    # Shape: (number of samples, 3)
-        self.targets = np.array(self.targets, dtype=np.float32)  # Shape: (number of samples, N-1)
-    
-    def __len__(self):
-        return len(self.inputs)
-    
-    def __getitem__(self, idx):
-        input_features = self.inputs[idx]
-        target = self.targets[idx]
-        return torch.tensor(input_features, dtype=torch.float32), torch.tensor(target, dtype=torch.float32)
 
 def main():
     # Parameter settings
     N = 9
-    J_list = [1.0, 1.5, 2.0]          # Example j values
-    h_list = np.linspace(0, 1, 21)    # 21 h values from 0 to 1 with a step size of 0.05
-    t_list = [1.0, 1.5, 2.0]          # Example temperature values
+    J_list = np.linspace(1.0, 2.0, 11)      # Example j values
+    h_list = np.linspace(0, 1, 11)    # 21 h values from 0 to 1 with a step size of 0.05
+    t_list = np.linspace(1.0, 2.0, 11)        # Example temperature values
     
     # Data generation (comment out after the first run)
-    #logger.info("Generating and saving data...")
-    #generate_and_save_data(N, J_list, h_list, t_list, data_folder='correlation_dataset')
+    logger.info("Generating and saving data...")
+    generate_and_save_data(N, J_list, h_list, t_list, data_folder='correlation_dataset')
     logger.info("Data generation completed.")
     
     # Create dataset
