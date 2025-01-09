@@ -232,10 +232,3 @@ This Python script implements a Graph Neural Network (GNN) using PyTorch to pred
 
 ##### `requirements.txt`
 
-## License
-
-[MIT](LICENSE)
-
-## Contact
-
-For any questions or suggestions, please open an issue or contact [your-email@example.com](mailto:your-email@example.com).
