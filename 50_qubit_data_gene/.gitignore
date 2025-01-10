@@ -1,0 +1,8 @@
+.vscode*
+*.DS_Store
+*.jld2
+docs/build
+*/ManiFest.toml
+Manifest.toml
+dev
+*.log
