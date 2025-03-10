@@ -71,7 +71,18 @@ Follow these steps to set up and run the project:
 
     *Heatmap: Standard Deviation of Predicted Correlation Across Temperature T and Transverse Field h, indicating prediction precision.*
 
+#### Unsupervised Phase Transition Detection
+![Phase Transition Analysis](figure/phase_transition_analysis.png)
+
+*Heatmap: Unsupervised detection of quantum phase transitions using correlation features. Critical regions (yellow) align with theoretical critical point h/J=1, achieving 95.5% anomaly detection accuracy near criticality.*
+
+#### Key Metrics:
+- **Samples Analyzed**: 1,331 
+- **Critical Region Detection Rate**: 95.5% 
+- **Analysis Techniques**: PCA + DBSCAN clustering on correlation features
+
 ## Updates
+
 
 ### Update 2.2 : 2025/1/9
 
@@ -110,6 +121,23 @@ Includes scripts for generating and processing the Gibbs state data, simulating 
 Contains scripts and utilities for generating test data, evaluating the trained models, and visualizing the results.
 
 ### Previous Updates
+
+### Update 2.3 : 2025/3/10
+
+- **Added Unsupervised Phase Analysis**:
+  - Implemented `draw.py` for automated phase transition detection:
+    - **Feature Engineering**: Extracts 4 key correlation features (mean strength, decay slope, variance, endpoint difference)
+    - **Dimensionality Reduction**: Uses PCA for 2D visualization of high-dimensional correlation patterns
+    - **Cluster Analysis**: Applies DBSCAN to identify anomalous regions in parameter space (h/J vs T)
+  - **Validation Metrics**:
+    - Achieved 95.5% detection rate near theoretical critical point (h/J=1)
+    - Processed 1,331 samples across diverse Hamiltonian parameters
+  - **Visualization**:
+    - Generates dual plots showing feature space clustering and parameter space phase diagram
+    - Highlights quantum critical regions using unsupervised learning
+
+- **Updated Project Structure**:
+  - Updated documentation with unsupervised learning capabilities
 
 #### Update 2.1 : 2025/1/9
 

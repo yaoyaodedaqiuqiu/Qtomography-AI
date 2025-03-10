@@ -1,6 +1,7 @@
 # dataset.py
 import os
 import numpy as np
+import torch 
 import pickle
 from scipy.linalg import expm
 import matplotlib.pyplot as plt

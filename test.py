@@ -81,7 +81,7 @@ def main():
     t_list = np.linspace(1.5, 2.5, 11)            # New temperature values for testing
     # Data generation
     logger.info("Generating and saving test data...")
-    generate_and_save_data(N, J_list, h_list, t_list, data_folder='test_dataset')
+    # generate_and_save_data(N, J_list, h_list, t_list, data_folder='test_dataset')
     logger.info("Test data generation completed.")
     
     # Create test dataset

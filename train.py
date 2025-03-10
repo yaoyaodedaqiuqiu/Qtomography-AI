@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 import logging
-from dataset import generate_and_save_data  
+from dataset import generate_and_save_data, CorrelationDatasetPyTorch
 from model import CorrelationModel  
 
 # Set up logging
@@ -27,7 +27,7 @@ def main():
     
     # Data generation (comment out after the first run)
     logger.info("Generating and saving data...")
-    generate_and_save_data(N, J_list, h_list, t_list, data_folder='correlation_dataset')
+    # generate_and_save_data(N, J_list, h_list, t_list, data_folder='correlation_dataset')
     logger.info("Data generation completed.")
     
     # Create dataset
