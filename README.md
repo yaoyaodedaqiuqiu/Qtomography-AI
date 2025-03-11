@@ -83,6 +83,23 @@ Follow these steps to set up and run the project:
 
 ## Updates
 
+### Update 2.3 : 2025/3/10
+
+- **Added Unsupervised Phase Analysis**:
+  - Implemented `draw.py` for automated phase transition detection:
+    - **Feature Engineering**: Extracts 4 key correlation features (mean strength, decay slope, variance, endpoint difference)
+    - **Dimensionality Reduction**: Uses PCA for 2D visualization of high-dimensional correlation patterns
+    - **Cluster Analysis**: Applies DBSCAN to identify anomalous regions in parameter space (h/J vs T)
+  - **Validation Metrics**:
+    - Achieved 95.5% detection rate near theoretical critical point (h/J=1)
+    - Processed 1,331 samples across diverse Hamiltonian parameters
+  - **Visualization**:
+    - Generates dual plots showing feature space clustering and parameter space phase diagram
+    - Highlights quantum critical regions using unsupervised learning
+
+- **Updated Project Structure**:
+  - Updated documentation with unsupervised learning capabilities
+
 
 ### Update 2.2 : 2025/1/9
 
@@ -120,26 +137,9 @@ Includes scripts for generating and processing the Gibbs state data, simulating 
 
 Contains scripts and utilities for generating test data, evaluating the trained models, and visualizing the results.
 
-### Previous Updates
 
-### Update 2.3 : 2025/3/10
 
-- **Added Unsupervised Phase Analysis**:
-  - Implemented `draw.py` for automated phase transition detection:
-    - **Feature Engineering**: Extracts 4 key correlation features (mean strength, decay slope, variance, endpoint difference)
-    - **Dimensionality Reduction**: Uses PCA for 2D visualization of high-dimensional correlation patterns
-    - **Cluster Analysis**: Applies DBSCAN to identify anomalous regions in parameter space (h/J vs T)
-  - **Validation Metrics**:
-    - Achieved 95.5% detection rate near theoretical critical point (h/J=1)
-    - Processed 1,331 samples across diverse Hamiltonian parameters
-  - **Visualization**:
-    - Generates dual plots showing feature space clustering and parameter space phase diagram
-    - Highlights quantum critical regions using unsupervised learning
-
-- **Updated Project Structure**:
-  - Updated documentation with unsupervised learning capabilities
-
-#### Update 2.1 : 2025/1/9
+### Update 2.1 : 2025/1/9
 
 - **Modified `train.py`**:
     - **Data Utilization**: Configured the training script to use 100% of the generated data for training, eliminating the validation and testing split.
@@ -178,7 +178,7 @@ Includes scripts for generating and processing the Gibbs state data, simulating 
 
 Introduced for generating test data, loading trained models, evaluating performance, and visualizing results.
 
-#### Update 2.0 : 2024/12/15
+### Update 2.0 : 2024/12/15
 
 - **Updated `requirements.txt`**: Ensured all necessary dependencies are listed and removed any redundant packages.
 - **Reorganized Project Structure**: Streamlined the repository by organizing all code into four main directories:
@@ -205,7 +205,7 @@ Includes scripts for generating and processing the Gibbs state data, simulating 
 
 Introduced for generating test data, loading trained models, evaluating performance, and visualizing results.
 
-#### Update 1.0 : 2024/11/26
+### Update 1.0 : 2024/11/26
 
 ##### `dataset.py`
 
@@ -225,7 +225,7 @@ The following functions are defined in `train.py`:
 - **train()**: Defines the training process, including forward propagation, loss calculation, backpropagation, and optimization steps.
 - **save_model()**: Saves the trained model to a file for later use.
 
-#### Update 0.0 : 2024/11/22
+### Update 0.0 : 2024/11/22
 
 Uploaded the previous code and trial for exploring GCN in the Ising model.
 
