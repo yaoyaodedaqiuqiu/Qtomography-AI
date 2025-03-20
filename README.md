@@ -83,6 +83,11 @@ Follow these steps to set up and run the project:
 
 ## Updates
 
+### Update 2.3.1 : 2025/3/13
+
+- **Code Optimization & Maintenance**:
+  - Removed redundant class `CorrelationDatasetPyTorch` from `test.py`
+
 ### Update 2.3 : 2025/3/10
 
 - **Added Unsupervised Phase Analysis**:
