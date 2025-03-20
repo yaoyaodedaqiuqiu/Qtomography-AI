@@ -40,13 +40,38 @@ Follow these steps to set up and run the project:
     ```bash
     python train.py
     ```
+    - **Optional: Specify Model Type**:
+        ```bash
+        python train.py --model transformer
+        python train.py --model cnn
+        python train.py --model gcn
+        ```
 
 5. **Run the Testing Script**:
     ```bash
     python test.py
     ```
 
-6. **View Example Results**:
+6. **Using TensorBoard for Visualization**:
+    ```bash
+    # Install TensorBoard if not already installed
+    pip install tensorboard
+    
+    # Start TensorBoard server
+    tensorboard --logdir=runs
+    ```
+    
+    - **For Remote Servers**:
+        ```bash
+        # On server
+        tensorboard --logdir=runs --host=0.0.0.0 --port=6006
+        
+        # On local machine (in a new terminal)
+        ssh -L 6006:localhost:6006 username@server_ip
+        ```
+        Then open your browser and navigate to: `http://localhost:6006`
+
+7. **View Example Results**:
 
     After running the testing script, you can find the generated correlation plots in the `figure_test` directory. Below are some example results:
 
@@ -71,6 +96,24 @@ Follow these steps to set up and run the project:
 
     *Heatmap: Standard Deviation of Predicted Correlation Across Temperature T and Transverse Field h, indicating prediction precision.*
 
+    #### TensorBoard Visualization Examples
+
+    ![Training Loss](figure/loss.png)
+
+    *Training loss curve showing model convergence over epochs. The decreasing trend indicates successful learning.*
+
+    ![Gradient Flow](figure/gradients.png)
+
+    *Gradient flow visualization showing the distribution of gradients across different layers during training.*
+
+    ![Model Graph](figure/graph.png)
+
+    *Interactive model architecture graph showing the network structure and connections between layers.*
+
+    ![Parameter Distribution](figure/parameter.png)
+
+    *Distribution of model parameters across training, providing insights into weight initialization and updates.*
+
 #### Unsupervised Phase Transition Detection
 ![Phase Transition Analysis](figure/phase_transition_analysis.png)
 
@@ -82,6 +125,13 @@ Follow these steps to set up and run the project:
 - **Analysis Techniques**: PCA + DBSCAN clustering on correlation features
 
 ## Updates
+
+### Update 2.4.1 : 2025/3/20
+
+- **Enhanced Training Framework**:
+  - Added support for multiple model architectures (Transformer, CNN, GCN)
+  - Integrated TensorBoard for comprehensive training visualization
+  - Improved model selection via command-line arguments
 
 ### Update 2.3.1 : 2025/3/13
 
@@ -109,94 +159,7 @@ Follow these steps to set up and run the project:
 ### Update 2.2 : 2025/1/9
 
 - **Integrated `CorrelationDatasetPyTorch` into `dataset.py`**:
-    - Moved the `CorrelationDatasetPyTorch` class definition into the `dataset.py` module to streamline imports and avoid redundancy.
-    - Fixed the previous import error by ensuring that all necessary classes and functions are properly exported from `dataset.py`.
-
-- **Updated `test.py`**:
-    - **Enhanced Plotting Capabilities**: Modified the testing script to generate comprehensive plots, including:
-        - **Heatmap of Predicted Correlation**: Visualizes how the predicted correlation `<σ₁ᶻ σ₂ᶻ>` varies with temperature `T` and transverse field `h`.
-        - **Critical Point Analysis**: Focuses on `h=0.5` to analyze the model's performance near the phase transition point.
-        - **Precision Heatmap**: Shows the standard deviation of predicted correlations across `T` and `h`, indicating the precision and consistency of the model's predictions.
-    - **Figure Naming Consistency**: Ensured that all figure filenames are formatted with one decimal place for temperature values (e.g., `correlation_functions_h0.1.png`) to maintain clarity and avoid long decimal numbers.
-    - **Directory Management**: Verified that all generated figures are saved in the `figure_test` directory with appropriate subdirectories if necessary.
-
-
-
-- **Bug Fixes and Enhancements**:
-    - Fixed the issue with filename formatting in `test.py` to prevent errors when loading and saving figures.
-    - Enhanced logging to provide more detailed information during the testing and plotting processes.
-
-#### `train/`
-
-Contains scripts related to training the AI models, including the main training loop, evaluation, and visualization tools.
-
-#### `model/`
-
-Houses the neural network architectures used for predicting correlations in the quantum many-body system.
-
-#### `dataset/`
-
-Includes scripts for generating and processing the Gibbs state data, simulating quantum measurements, and preparing datasets for training. Now also contains the `CorrelationDatasetPyTorch` class for dataset management.
-
-#### `test/`
-
-Contains scripts and utilities for generating test data, evaluating the trained models, and visualizing the results.
-
-
-
-### Update 2.1 : 2025/1/9
-
-- **Modified `train.py`**:
-    - **Data Utilization**: Configured the training script to use 100% of the generated data for training, eliminating the validation and testing split.
-    - **Removed Validation Phase**: The validation and testing phases have been removed from the training process to streamline training.
-    - **Enhanced Logging**: Improved logging to provide more detailed training progress and performance metrics.
-  
-- **Added `test.py`**:
-    - **Data Generation for Testing**: Introduced a new script to generate test data with specific parameters:
-        - `N = 9`
-        - `J_list = [1.0, 1.5, 2.0]`
-        - `h_list = np.linspace(0, 1, 6)`
-        - `t_list = [1.2, 1.8, 2.5]`
-    - **Model Evaluation**: The script loads the trained model parameters and evaluates the model on the newly generated test data.
-    - **Visualization**: Generates and saves plots comparing the true and predicted correlation terms for the test data.
-    - **Figure Naming Fix**: Ensured that figure filenames are formatted with one decimal place for temperature values to maintain consistency and readability.
-    - **Directory Management**: Ensures that test data and visualizations are saved in designated directories for better organization.
-
-- **Project Structure Enhancements**:
-    - **`test/` Directory**: Created a new directory to house the `test.py` script and related utilities.
-    - **Documentation Updates**: Updated documentation to reflect the addition of the testing phase and provide guidance on how to execute it.
-    - **Figure Naming Fix**: Updated `test.py` to format temperature values in figure filenames to one decimal place, ensuring cleaner and more readable filenames.
-
-##### `train/`
-
-Contains scripts related to training the AI models, including the main training loop, evaluation, and visualization tools.
-
-##### `model/`
-
-Houses the neural network architectures used for predicting correlations in the quantum many-body system.
-
-##### `dataset/`
-
-Includes scripts for generating and processing the Gibbs state data, simulating quantum measurements, and preparing datasets for training.
-
-##### `test/`
-
-Introduced for generating test data, loading trained models, evaluating performance, and visualizing results.
-
-### Update 2.0 : 2024/12/15
-
-- **Updated `requirements.txt`**: Ensured all necessary dependencies are listed and removed any redundant packages.
-- **Reorganized Project Structure**: Streamlined the repository by organizing all code into four main directories:
-    - **`train/`**: Contains training scripts and related utilities.
-    - **`model/`**: Houses model definitions and architectures.
-    - **`dataset/`**: Includes data generation and processing scripts.
-    - **`test/`**: Introduced for testing scripts and evaluation tools.
-- **Cleaned Up Files**: Removed previously redundant files to maintain a clean and efficient codebase.
-- **Introduced New Documentation**: Provided brief introductions for each of the four main directories.
-
-##### `train/`
-
-Contains scripts related to training the AI models, including the main training loop, evaluation, and visualization tools.
+    - Moved the scripts related to training the AI models, including the main training loop, evaluation, and visualization tools.
 
 ##### `model/`
 
@@ -264,4 +227,3 @@ This Python script implements a Graph Neural Network (GNN) using PyTorch to pred
 ##### `trial.ipynb`
 
 ##### `requirements.txt`
-
