@@ -51,9 +51,9 @@ def main():
 
     # Dataset configuration
     N = 9
-    J_list = np.linspace(1.5, 2.5, 11)
-    h_list = np.linspace(0.5, 1.5, 11)
-    t_list = np.linspace(1.5, 2.5, 11)
+    J_list = np.linspace(2.0, 4.0, 11)
+    h_list = np.linspace(1.0, 2.0, 11)
+    t_list = np.linspace(2.0, 4.0, 11)
     
     # Generate test data with same logic
     logger.info("Generating and saving test data...")

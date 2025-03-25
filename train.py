@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter  # Added TensorBoard support
-from dataset import CorrelationDatasetPyTorch
+from dataset import CorrelationDatasetPyTorch, generate_and_save_data
 from model import CorrelationModel, PositionAwareModel
 import matplotlib.pyplot as plt
 import logging
@@ -73,7 +73,7 @@ def main():
     
     # Data generation
     logger.info("Generating and saving test data...")
-    # generate_and_save_data(N, J_list, h_list, t_list, data_folder='correlation_dataset')
+    generate_and_save_data(N, J_list, h_list, t_list, data_folder='correlation_dataset')
     logger.info("Test data generation completed.")
 
     output_dim = N - 1
