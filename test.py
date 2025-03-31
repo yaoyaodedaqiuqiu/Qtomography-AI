@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import logging
 from dataset import CorrelationDatasetPyTorch, generate_and_save_data  # Add data generation import
 from model import CorrelationModel, PositionAwareModel
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
@@ -57,7 +58,7 @@ def main():
     
     # Generate test data with same logic
     logger.info("Generating and saving test data...")
-    generate_and_save_data(N, J_list, h_list, t_list, data_folder='test_dataset')
+    # generate_and_save_data(N, J_list, h_list, t_list, data_folder='test_dataset')
     logger.info("Test data generation completed.")
 
     # Load checkpoint
@@ -105,6 +106,30 @@ def main():
     targets = np.vstack(all_targets)
     preds = np.vstack(all_preds)
 
+    # Calculate metrics
+    mse = mean_squared_error(targets, preds)
+    mae = mean_absolute_error(targets, preds)
+    r2 = r2_score(targets, preds)
+
+    print(f"Metrics for {args.model_type}:")
+    print(f"  MSE: {mse:.4f}")
+    print(f"  MAE: {mae:.4f}")
+    print(f"  R²: {r2:.4f}")
+
+    # Distance-dependent error
+    distance_errors = []
+    for d in range(preds.shape[1]):
+        distance_errors.append(mean_squared_error(targets[:, d], preds[:, d]))
+    print(f"  Distance-dependent MSE: {distance_errors}")
+
+    # Plot distance-dependent error
+    plt.figure()
+    plt.plot(range(1, len(distance_errors) + 1), distance_errors)
+    plt.xlabel("Distance (d)")
+    plt.ylabel("MSE")
+    plt.title(f"{args.model_type} - Distance-dependent Error")
+    plt.savefig(os.path.join(figure_folder, f'{args.model_type}_distance_error.png'))
+    plt.close()
     # Visualization functions
     def plot_correlation_comparison():
         plt.figure(figsize=(15, 10))
