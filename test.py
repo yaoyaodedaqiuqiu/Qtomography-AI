@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
 logger = logging.getLogger()
-
+#test
 # Device configuration
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
