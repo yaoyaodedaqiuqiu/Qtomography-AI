@@ -1,4 +1,3 @@
-# train.py
 import os
 import argparse
 import numpy as np
@@ -8,7 +7,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter  # Added TensorBoard support
 from dataset import CorrelationDatasetPyTorch, generate_and_save_data
-from model import CorrelationModel, PositionAwareModel
+from model import CorrelationModel, PositionAwareModel, TransformerModel
 import matplotlib.pyplot as plt
 import logging
 
@@ -18,8 +17,10 @@ logger = logging.getLogger()
 
 # Configuration parameters
 parser = argparse.ArgumentParser(description='Train correlation prediction model')
-parser.add_argument('--model', type=str, default='MLP', choices=['MLP', 'PositionAware'],
-                    help='Model type: MLP or PositionAware')
+parser.add_argument('--model', type=str, default='MLP', choices=['MLP', 'PositionAware', 'Transformer'],
+                    help='Model type: MLP, PositionAware, or Transformer')
+parser.add_argument('--model_type', type=str, default='Cluster', choices=['Ising', 'Heisenberg', 'Cluster'],
+                    help='Choose the physical model: Ising, Heisenberg, or Cluster')
 parser.add_argument('--hidden_dim', type=int, default=128, help='Hidden layer dimension')
 parser.add_argument('--lr', type=float, default=1e-3, help='Learning rate')
 parser.add_argument('--epochs', type=int, default=500, help='Number of epochs')
@@ -38,6 +39,12 @@ def create_model(model_type, input_dim, hidden_dim, output_dim):
         )
     elif model_type == "MLP":
         return CorrelationModel(
+            input_dim=input_dim,
+            hidden_dim=hidden_dim,
+            output_dim=output_dim
+        )
+    elif model_type == "Transformer":
+        return TransformerModel(
             input_dim=input_dim,
             hidden_dim=hidden_dim,
             output_dim=output_dim
@@ -73,14 +80,15 @@ def main():
     
     # Data generation
     logger.info("Generating and saving test data...")
-    generate_and_save_data(N, J_list, h_list, t_list, data_folder='correlation_dataset')
+    # Generate and save data for the selected model
+    generate_and_save_data(N, J_list, h_list, t_list, model_type=args.model_type, data_folder='train_dataset')
     logger.info("Test data generation completed.")
 
     output_dim = N - 1
     
     # Load dataset
     data_folder = "correlation_dataset"
-    full_dataset = CorrelationDatasetPyTorch(data_folder, N)
+    full_dataset = CorrelationDatasetPyTorch(data_folder=data_folder, N=N, model_type=args.model_type)
     sample_input, sample_target = full_dataset[0]
     input_dim = sample_input.shape[0]
     
@@ -117,15 +125,16 @@ def main():
         if (epoch+1) % 10 == 0:
             print(f"Epoch {epoch+1:03d}/{args.epochs} | Loss: {train_loss:.4e}")
         
-        # Save best model
+        # Save best model with dynamic naming
         if train_loss < best_loss:
             best_loss = train_loss
+            model_filename = f"best_model_{args.model}_for_{args.model_type}.pth"
             torch.save({
                 'epoch': epoch,
                 'model_state': model.state_dict(),
                 'optimizer_state': optimizer.state_dict(),
                 'loss': train_loss,
-            }, f"model_pth/best_model_{args.model}.pth")
+            }, os.path.join('model_pth', model_filename))
     
     # Log hyperparameters and final metrics
     writer.add_hparams(

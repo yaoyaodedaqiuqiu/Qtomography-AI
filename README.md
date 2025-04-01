@@ -4,7 +4,7 @@ Utilizing AI to explore Quantum Many-body Systems
 
 ## Welcome
 
-Welcome to **Qtomography-AI**! This project leverages artificial intelligence to investigate quantum many-body systems, specifically focusing on the Ising model and its Gibbs states.
+Welcome to **Qtomography-AI**! This project leverages artificial intelligence to investigate quantum many-body systems, specifically focusing on the Ising model, Heisenberg model, and Cluster Hamiltonians through advanced model architectures including Transformer-based models.
 
 ### Getting Started
 
@@ -38,25 +38,20 @@ Follow these steps to set up and run the project:
 
 4. **Run the Training Script**:
     ```bash
-    # For MLP model
-    python train.py --model MLP
-    
-    # For Position-Aware model
-    python train.py --model PositionAware
-    
-    # Optional parameters
-    --hidden_dim 128      # Hidden layer dimension (default:128)
-    --log_dir runs        # TensorBoard log directory (default:runs)
-    --epochs 100          # Number of training epochs (default:100)
+    # Syntax:
+    python train.py --model [MLP|PositionAware|Transformer] --physics [Ising|Heisenberg|Cluster] [optional arguments]
+
+    # Example for Transformer model on the Heisenberg Hamiltonian:
+    python train.py --model Transformer --physics Heisenberg 
     ```
 
 5. **Run the Testing Script**:
     ```bash
-    # Test MLP model
-    python test.py --model_type MLP --checkpoint model_pth/best_model_MLP.pth
-    
-    # Test Position-Aware model 
-    python test.py --model_type PositionAware --checkpoint model_pth/best_model_PositionAware.pth
+    # Syntax:
+    python test.py --model [MLP|PositionAware|Transformer] --physics [Ising|Heisenberg|Cluster] --checkpoint model_pth/best_model_[MODEL].pth
+
+    # Example for testing the PositionAware model on the Cluster Hamiltonian:
+    python test.py --model PositionAware --physics Cluster
     ```
 
 6. **Using TensorBoard for Visualization**:
@@ -66,7 +61,7 @@ Follow these steps to set up and run the project:
 
 ### 7. View Example Results
 
-After running the testing script, you can find the generated correlation plots in the `figure_test` directory. Below are some example results:
+After running the testing script, you can find the generated plots in the `figure_test` directory. Below are some example results:
 
 #### Heatmap of Predicted Correlation `<σ₁ᶻ σ₂ᶻ>`
 ![Heatmap of Correlation](figure_test/heatmap_correlation.png)  
@@ -111,62 +106,69 @@ After running the testing script, you can find the generated correlation plots i
 - Critical Region Detection Rate: 95.5% 
 - Analysis Method: PCA + DBSCAN Clustering
 
-
 ## Updates
+### Update 2.5.0 : 2025/4/1
+- **Enhanced Testing Framework & Visualization**:
+  - Improved plotting for model performance including scatter plots with linear regression fits, error heatmaps, and distribution plots for prediction errors.
+  - Updated interactive logic in both training and testing scripts to allow model and physical model specification directly via the command line.
+
+- **New Model Architecture**:
+  - Added support for a new Transformer-based model, offering enhanced performance in complex quantum many-body systems.
+
+- **Optimized Train/Test Interaction**:
+  - Refactored command-line interfaces for `train.py` and `test.py` to require only specifying the model type (`MLP`, `PositionAware`, or `Transformer`) and the physical model (`Ising`, `Heisenberg`, or `Cluster`).
+
+- **Dataset Enhancements**:
+  - Updated dataset scripts to support multiple Hamiltonians including Ising, Heisenberg, and Cluster models. Users can now seamlessly switch between these physical models for simulation and training.
+
 ### Update 2.4.2 : 2024/3/25
 
 - **Enhanced Model Architectures**:
-  - Added Position-Aware Neural Network with physics-inspired structure
-  - Maintained baseline MLP model for comparison
+  - Added Position-Aware Neural Network with physics-inspired structure.
+  - Maintained baseline MLP model for comparison.
 
 - **Training System Improvements**:
-  - Integrated TensorBoard for real-time monitoring of:
-    - Training/validation loss curves
-    - Gradient flow visualization
-    - Model parameter distributions
-  - Automated model checkpointing in `model_pth/` directory
+  - Integrated TensorBoard for real-time monitoring of training/validation loss curves, gradient flow visualization, and model parameter distributions.
+  - Automated model checkpointing in the `model_pth/` directory.
 
 - **Testing Framework**:
-  - Added comparative analysis between MLP and Position-Aware models
-  - New visualization types:
-    - Distance-dependent correlation plots
-    - Prediction error heatmaps
-  - Unified testing interface with model type specification
+  - Added comparative analysis between MLP and Position-Aware models.
+  - New visualization types including distance-dependent correlation plots and prediction error heatmaps.
+  - Unified testing interface with model type specification.
 
 ### Update 2.4.1 : 2025/3/20
 
 - **Enhanced Training Framework**:
-  - Added support for multiple model architectures (Transformer, CNN, GCN)
-  - Integrated TensorBoard for comprehensive training visualization
-  - Improved model selection via command-line arguments
+  - Added support for multiple model architectures (Transformer, CNN, GCN).
+  - Integrated TensorBoard for comprehensive training visualization.
+  - Improved model selection via command-line arguments.
 
 ### Update 2.3.1 : 2025/3/13
 
 - **Code Optimization & Maintenance**:
-  - Removed redundant class `CorrelationDatasetPyTorch` from `test.py`
+  - Removed redundant class `CorrelationDatasetPyTorch` from `test.py`.
 
 ### Update 2.3 : 2025/3/10
 
 - **Added Unsupervised Phase Analysis**:
   - Implemented `draw.py` for automated phase transition detection:
-    - **Feature Engineering**: Extracts 4 key correlation features (mean strength, decay slope, variance, endpoint difference)
-    - **Dimensionality Reduction**: Uses PCA for 2D visualization of high-dimensional correlation patterns
-    - **Cluster Analysis**: Applies DBSCAN to identify anomalous regions in parameter space (h/J vs T)
+    - **Feature Engineering**: Extracts 4 key correlation features (mean strength, decay slope, variance, endpoint difference).
+    - **Dimensionality Reduction**: Uses PCA for 2D visualization of high-dimensional correlation patterns.
+    - **Cluster Analysis**: Applies DBSCAN to identify anomalous regions in parameter space (h/J vs T).
   - **Validation Metrics**:
-    - Achieved 95.5% detection rate near theoretical critical point (h/J=1)
-    - Processed 1,331 samples across diverse Hamiltonian parameters
+    - Achieved 95.5% detection rate near theoretical critical point (h/J=1).
+    - Processed 1,331 samples across diverse Hamiltonian parameters.
   - **Visualization**:
-    - Generates dual plots showing feature space clustering and parameter space phase diagram
-    - Highlights quantum critical regions using unsupervised learning
+    - Generates dual plots showing feature space clustering and parameter space phase diagram.
+    - Highlights quantum critical regions using unsupervised learning.
 
 - **Updated Project Structure**:
-  - Updated documentation with unsupervised learning capabilities
-
+  - Updated documentation with unsupervised learning capabilities.
 
 ### Update 2.2 : 2025/1/9
 
 - **Integrated `CorrelationDatasetPyTorch` into `dataset.py`**:
-    - Moved the scripts related to training the AI models, including the main training loop, evaluation, and visualization tools.
+    - Moved scripts related to training the AI models, including the main training loop, evaluation, and visualization tools.
 
 ##### `model/`
 
@@ -174,7 +176,7 @@ Houses the neural network architectures used for predicting correlations in the 
 
 ##### `dataset/`
 
-Includes scripts for generating and processing the Gibbs state data, simulating quantum measurements, and preparing datasets for training.
+Includes scripts for generating and processing the Gibbs state data, simulating quantum measurements, and preparing datasets for training. **Updated** to support multiple Hamiltonians: Ising, Heisenberg, and Cluster.
 
 ##### `test/`
 

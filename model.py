@@ -1,6 +1,48 @@
 import torch
 import torch.nn as nn
+class TransformerModel(nn.Module):
+    def __init__(self, input_dim=3, hidden_dim=128, output_dim=8, num_heads=4, num_layers=2):
+        super(TransformerModel, self).__init__()
+        
+        self.input_dim = input_dim
+        self.hidden_dim = hidden_dim
+        self.output_dim = output_dim
+        
+        # Transformer Encoder
+        self.encoder_layer = nn.TransformerEncoderLayer(
+            d_model=hidden_dim, nhead=num_heads, dim_feedforward=hidden_dim * 2
+        )
+        self.transformer_encoder = nn.TransformerEncoder(
+            self.encoder_layer, num_layers=num_layers
+        )
+        
+        # Input Linear Layer (to match the input dimensions)
+        self.input_fc = nn.Linear(input_dim, hidden_dim)
+        
+        # Output Linear Layer (to match the output dimensions)
+        self.output_fc = nn.Linear(hidden_dim, output_dim)
 
+    def forward(self, x):
+        # x shape: [batch_size, input_dim] => [batch_size, 1, input_dim]
+        x = x.unsqueeze(1)  # Add sequence length dimension (seq_len=1)
+        
+        # Convert shape to [seq_len, batch_size, hidden_dim] (for Transformer)
+        x = self.input_fc(x)  # Now shape is [batch_size, 1, hidden_dim] => [1, batch_size, hidden_dim]
+        
+        # Pass through Transformer (requires [seq_len, batch_size, hidden_dim])
+        x = x.permute(1, 0, 2)  # Now shape is [1, batch_size, hidden_dim]
+        
+        # Pass through Transformer
+        x = self.transformer_encoder(x)
+        
+        # Take the output corresponding to the last sequence element
+        x = x[-1, :, :]  # [batch_size, hidden_dim]
+        
+        # Final output layer
+        x = self.output_fc(x)
+        return x
+
+    
 class CorrelationModel(nn.Module):
     """Baseline MLP model"""
     def __init__(self, input_dim=3, hidden_dim=128, output_dim=8):
